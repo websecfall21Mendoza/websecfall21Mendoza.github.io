@@ -1,0 +1,65 @@
+div {
+  margin: auto;
+  width: 250px;
+}
+
+div.login {
+  position: absolute;
+  top: 0px;
+  left: 10;
+  width: 200px;
+  height: 100px;
+  padding: 10px;
+}
+
+.space {
+  padding-top:20px;
+}
+
+.message {
+  border-radius: 25px;
+  background: white;
+  padding: 5px;
+  width: 250px;
+}
+
+p#needLogin {
+  color: red;
+}
+
+ul {
+  list-style-type:none;
+}
+
+li {
+  color:white;
+  border-radius: 20px;
+  padding: 11px;
+  width: fit-content;
+  min-width: 10px;
+  max-width: 150px;
+  min-height: 15px;
+  height: fit-content;
+  margin-bottom: 20px;
+  margin-top: 10px;
+  overflow-wrap: break-word;
+}
+
+li.you {
+  color: black;
+  background: #d8d8d8;
+  margin-right: auto;
+  margin-left: -35px;
+}
+
+li.me {
+  color: white;
+  background: #1982FC;
+  margin-left: auto; 
+  margin-right: 5px;
+}
+
+body {
+  background-color : #dce3e1;
+  font-family: Helvetica, sans-serif;
+}
