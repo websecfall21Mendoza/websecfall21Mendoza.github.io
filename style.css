@@ -1,3 +1,162 @@
-* {
-  background-color:red;
+.section {
+  background-color: #8ED5EC;
+  padding: 10px;
+  margin: 10px;
+  height: 93%;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/mini-cord.appspot.com/o/space_light.jpg?alt=media&token=f1c4542f-d9fd-4c9e-9da7-63e214f4446e');
+}
+
+#servers {
+  text-align: center;
+  overflow: auto;
+  height: 85%;
+}
+
+#serverColumn {
+  width: 155px;
+}
+
+.serverChoice {
+  border-radius: 10px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  width: 100px;
+  line-height: 15px;
+  text-align: center;
+  height: 50px;
+}
+
+.channelChoice {
+  height: fit-content;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  line-height: 15px;
+  text-align: center;
+  left: 10;
+  padding: 1px;
+  background: #C3B1E1;
+}
+
+#channelsList {
+  list-style-type:none;
+  padding:0;
+  overflow:auto;
+  height: 86%;
+}
+
+#textChannels {
+}
+
+#chat {
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/mini-cord.appspot.com/o/lavender.jpg?alt=media&token=48087e64-1f1a-4a06-8be0-cfee2a08c2fa');
+}
+
+#users {
+}
+
+div.main {
+  height: 800px;
+  display: grid;
+  grid-template-columns: 1.5fr 4fr 9fr 4fr;
+  grid-gap: 20px;
+  background-image: url('https://firebasestorage.googleapis.com/v0/b/mini-cord.appspot.com/o/space.jpg?alt=media&token=a944208b-dc4a-41a6-ad77-ad5e5d5987cd');
+}
+
+div {
+  background-color: #F6D1D9;
+  overflow: hidden;
+  font-family: Helvetica, sans-serif;
+}
+
+ul {
+  overflow:auto;
+}
+
+.adder {
+  cursor: pointer;
+  height: fit-content;
+  line-height: 25px;
+  margin: 10px;
+  padding: 3px;
+  width: fit-content;
+}
+
+#messagesList {
+  height: 600px;
+  overflow:auto;
+}
+
+#usersList {
+  height: 700px;
+  overflow:auto;
+}
+
+input {
+  margin: 10px;
+  padding: 0px;
+}
+
+#servers::-webkit-scrollbar {
+width: 0px;
+}
+  
+#channelsList::-webkit-scrollbar {
+width: 0px;
+}
+
+:not(input) {
+  border-radius: 20px;
+}
+ 
+
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.3); 
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px     rgba(0,0,0,0.5); 
+}
+
+input {
+  height: 20px;
+}
+
+li {
+  list-style-type: none;
+}
+
+.messageChoice,.user {
+  background-color: #b19cd9;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  margin-right: 10%;
+  height: fit-content;
+  line-height: 23px;
+  padding-left: 15px;
+  padding-top: 3px;
+}
+
+.user {
+  padding-top: 0px;
+  padding-bottom: 2px;
+  height: 25px;
+  margin-bottom: 25px;
+  margin-top: 5px;
+}
+
+.messageChoice:hover {
+  transform: scale(1.03);
+}
+
+h4 {
+  margin: 0px;
+  margin-bottom: -10px;
 }
