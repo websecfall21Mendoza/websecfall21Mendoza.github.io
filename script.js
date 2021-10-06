@@ -1,6 +1,7 @@
-  // Import the functions you need from the SDKs you need
+// Import the functions you need from the SDKs you need
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.2/firebase-app.js";
 import * as rtdb from "https://www.gstatic.com/firebasejs/9.0.2/firebase-database.js";
+import * as fbauth from "https://www.gstatic.com/firebasejs/9.0.2/firebase-auth.js";
   // TODO: Add SDKs for Firebase products that you want to use
   // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -17,6 +18,7 @@ import * as rtdb from "https://www.gstatic.com/firebasejs/9.0.2/firebase-databas
   // Initialize Firebase
   const app = initializeApp(firebaseConfig);
 let db = rtdb.getDatabase(app);
+let auth = fbauth.getAuth(app);
 let titleRef = rtdb.ref(db, "/");
 let servers = rtdb.child(titleRef,"servers()");
 let username = "guest";//window.prompt("Please enter name");
@@ -33,25 +35,106 @@ let channelCount = 0;
 let messageCount = 0;
 let userCount = 0;
 let changedServers = false;
+var pages = ["loginScreen","registerScreen","mainScreen"];
+var pageIndex = 0;
+let signedEmail = "";
 
-//let newObj = {"yes": true, "no": false, "people": ["what"]};
-//rtdb.update(titleRef,newObj);
-//rtdb.push(peopleRef,newObj);
+//here
+var showNextPage = function(){
+  var template = document.getElementById(pages[pageIndex]).innerHTML;
+  //do stuff to template here
+  display.innerHTML = template;
+}
 
-//assembleRefs();
-//getMessages();
-//console.log(chatRef);
+showNextPage();
+
+$(document).on('click', '.switcher', function() {
+  console.log("clicked!");
+  console.log($(this).attr("id"));
+  if($(this).attr("id") === "haveAccount") {
+    pageIndex = 0;
+  }
+  else {
+    pageIndex = (pageIndex + 1) % 3;
+  }
+  showNextPage();
+});
+
+
+
+
+
+
+
+$(document).on('click', '#registerButton', function() {
+  let email = $("#emailRegister").val();
+  let usernameRegistered = $("#usernameRegister").val();
+  let p1 = $("#passwordRegister").val();
+  let p2 = $("#passwordConfirm").val();
+  if (p1 != p2){
+    alert("Passwords don't match");
+    return;
+  }
+  fbauth.createUserWithEmailAndPassword(auth, email, p1).then(somedata=>{
+    let uid = somedata.user.uid;
+    let userRoleRef = rtdb.ref(db, `/users/${uid}/roles/user`);
+    let userRef = rtdb.ref(db, `/users/${uid}/username`);
+    rtdb.set(userRoleRef, true);
+    rtdb.set(userRef, usernameRegistered);
+    alert("successfully signed up!");
+    username = usernameRegistered;
+    $("#showUsername").text(`Logged in as: ${username}`);
+    signedEmail = email;
+    pageIndex += 1;
+    showNextPage();
+  }).catch(function(error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    console.log(errorCode);
+    console.log(errorMessage);
+  });
+});
+
+
+
+$(document).on('click', '#loginButton', function() {
+  let email = $("#emailLogin").val();
+  let pwd = $("#passwordLogin").val();
+  fbauth.signInWithEmailAndPassword(auth, email, pwd).then(
+    somedata=>{
+      let uid = somedata.user.uid;
+      pageIndex = 2;
+      signedEmail = email;
+      let userRef = rtdb.ref(db, `/users/${uid}/username`);
+      rtdb.get(userRef).then(ss => {
+        username = ss.val();
+        console.log(username);
+        $("#showUsername").text(`Logged in as: ${username}`);
+        showNextPage();
+      });
+    }).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode);
+      console.log(errorMessage);
+    });
+});
+
+
+
+
 getServers();
-// A $( document ).ready() block.
 $( document ).ready(function() {
   console.log( "ready!" );
-  $("#login").keyup(keyHandler);
+  //$("#login").keyup(keyHandler);
 });
 
 let keyHandler = function(evt) {
   console.log(evt.keyCode);
   if (evt.keyCode === 13) {
-    username = $("#login").val();
+    //username = $("#login").val();
     $("#showUsername").text(`Logged in as: ${username}`);
   }
   //let idFromDOM = $(clickedElement).attr("data-id");
@@ -66,7 +149,7 @@ let keyHandler = function(evt) {
   }
 });*/
 
-$(".adder").click(function(){
+$(document).on('click', '.adder', function() {
   ignore = true;
   let newVal = window.prompt("Please enter name");
   if(newVal != null && newVal.length > 0) {
@@ -294,7 +377,7 @@ function assembleRefs() {
   }
 }
 
-$("#enterChat").keyup(function(event) {
+$(document).on('keyup', '#enterChat', function() {
     if (event.keyCode === 13) {
         submitMessage($("#enterChat").val());
     }

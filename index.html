@@ -8,26 +8,52 @@
 </head>
 <body>
 <!-- partial:index.partial.html -->
-<div class = "whole">
-  <input type = "text" id = "login"></input>
-  <span id = "showUsername">Username</span>
-  <div class = "main">
-    <div class = "section" id = "serverColumn">
-      <div class = "adder" id = "addServer">Add Server</div>
-      <div class = "section" id = "servers"></div>
-    </div>
-    <div class = "section" id = "textChannels">
-      <div class = "adder" id = "addChannel">Add Text Channel</div>
-      <ul id = "channelsList"></ul>
-    </div>
-    <div class = "section" id = "chat">
-      <ul id = "messagesList"></ul>
-      <input type = "text" id = "enterChat">   Enter a Message!</input>
-    </div>
-    <div class = "section" id = "users">
-      <ul id = "usersList"></ul>
-    </div>
+<div data-page = "content" id = "display">
+</div>
+<div data-page = "template" id = "loginScreen">
+  <h1>Log In</h1>
+  <input placeholder = "email" id = emailLogin></input>
+  <input placeholder = "password" id = passwordLogin type = "password"></input>
+  <div class = "secondLine">
+    <button class = "enterButton" id = "loginButton">Sign In</button>
+    <button class = "switcher" id = "noAccount">Don't have an account?</button>
   </div>
+</div>
+<div data-page = "template" id = "registerScreen">
+  <h1>Register</h1>
+  <input placeholder = "email" id = emailRegister></input>
+  <input placeholder = "username" id = usernameRegister></input>
+  <div class = secondLine>
+    <input placeholder = "password" type = "password" id = passwordRegister></input>
+    <input placeholder = "confirm password" type = "password" id = passwordConfirm></input>
+  </div>
+  <div class = "secondLine">
+    <button class = "enterButton" id = "registerButton">Register</button>
+    <button class = "switcher" id = "haveAccount">Already have an account?</button>
+  </div>
+</div>
+<div data-page = "template" id = "mainScreen">
+<div class = secondLine>
+  <span id = "showUsername">Username</span>
+  <button class = "switcher" id = "superButton">Sign Out</button>
+</div>
+<div class = "main">
+  <div class = "section" id = "serverColumn">
+    <div class = "adder" id = "addServer">Add Server</div>
+    <div class = "section" id = "servers"></div>
+  </div>
+  <div class = "section" id = "textChannels">
+    <div class = "adder" id = "addChannel">Add Text Channel</div>
+    <ul id = "channelsList"></ul>
+  </div> 
+  <div class = "section" id = "chat">
+    <ul id = "messagesList"></ul>
+    <input type = "text" id = "enterChat">   Enter a Message!</input>
+</div>
+<div class = "section" id = "users">
+  <ul id = "usersList"></ul>
+</div>
+</div>
 </div>
 <!-- partial -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'></script><script type="module" src="./script.js"></script>
