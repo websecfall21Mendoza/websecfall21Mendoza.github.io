@@ -38,6 +38,7 @@ let changedServers = false;
 var pages = ["loginScreen","registerScreen","mainScreen"];
 var pageIndex = 0;
 let signedEmail = "";
+let ignoreUsers = false;
 
 //here
 var showNextPage = function(){
@@ -97,7 +98,6 @@ $(document).on('click', '#registerButton', function() {
 });
 
 
-
 $(document).on('click', '#loginButton', function() {
   let email = $("#emailLogin").val();
   let pwd = $("#passwordLogin").val();
@@ -119,6 +119,7 @@ $(document).on('click', '#loginButton', function() {
       var errorMessage = error.message;
       console.log(errorCode);
       console.log(errorMessage);
+      alert("Wrong email or password");
     });
 });
 
@@ -201,7 +202,7 @@ rtdb.onValue(servers, ss=>{
     getServers();
     getChannels();
     console.log(`user: ${username}`);
-    addUserIfNeeded();
+    //addUserIfNeeded(); don't need to add twice, causes duplicate user list
     console.log(channelRef);
     getUsers();
     if(channelRef.length == 0) {
@@ -222,6 +223,7 @@ rtdb.onValue(servers, ss=>{
 });
 
 $(document).on('click', '.serverChoice', function() {
+  ignoreUsers = true;
   $("#messagesList").empty();
   //$("#enterChat").hide();
   //$("#enterChat").html("hello");
@@ -234,6 +236,7 @@ $(document).on('click', '.serverChoice', function() {
   assembleRefs();
   getChannels();
   addUserIfNeeded();
+  console.log("gotusers");
   if(channel.length == 0) {
     return;
   }
@@ -282,9 +285,10 @@ $(document).on('click', '.channelChoice', function() {
 
 function addUserIfNeeded() {
   rtdb.get(usersRef).then(ss=>{
-    if(ss.val().hasOwnProperty(username)) {
+    if(ss.val().hasOwnProperty(username)) { //if exists need to get users
       console.log("getting!");
       console.log("exists!");
+      getUsers();
     }
     else {
       let firstUser = rtdb.child(usersRef,username);
