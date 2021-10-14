@@ -39,6 +39,7 @@ var pages = ["loginScreen","registerScreen","mainScreen"];
 var pageIndex = 0;
 let signedEmail = "";
 let ignoreUsers = false;
+let uid = "";
 
 //here
 var showNextPage = function(){
@@ -77,7 +78,7 @@ $(document).on('click', '#registerButton', function() {
     return;
   }
   fbauth.createUserWithEmailAndPassword(auth, email, p1).then(somedata=>{
-    let uid = somedata.user.uid;
+    uid = somedata.user.uid;
     let userRoleRef = rtdb.ref(db, `/users/${uid}/roles/user`);
     let userRef = rtdb.ref(db, `/users/${uid}/username`);
     rtdb.set(userRoleRef, true);
@@ -103,7 +104,7 @@ $(document).on('click', '#loginButton', function() {
   let pwd = $("#passwordLogin").val();
   fbauth.signInWithEmailAndPassword(auth, email, pwd).then(
     somedata=>{
-      let uid = somedata.user.uid;
+      uid = somedata.user.uid;
       pageIndex = 2;
       signedEmail = email;
       let userRef = rtdb.ref(db, `/users/${uid}/username`);
@@ -186,8 +187,8 @@ $(document).on('click', '.adder', function() {
       let chat = rtdb.child(gChat,"messages");
       let newChannel = {"message": "first message!", "user": username};
       let users = rtdb.child(newServer,"users");
-      let firstUser = rtdb.child(users,username);
-      let userInfo = {"roll":"admin"};
+      let firstUser = rtdb.child(users,uid);
+      let userInfo = {"roll":"admin","username":username};
       rtdb.update(firstUser,userInfo);
       ignore = true;
       rtdb.push(chat, newChannel);
@@ -307,14 +308,14 @@ $(document).on('click', '.channelChoice', function() {
 
 function addUserIfNeeded() {
   rtdb.get(usersRef).then(ss=>{
-    if(ss.val().hasOwnProperty(username)) { //if exists need to get users
+    if(ss.val().hasOwnProperty(uid)) { //if exists need to get users
       console.log("getting!");
       console.log("exists!");
       getUsers();
     }
     else {
-      let firstUser = rtdb.child(usersRef,username);
-      let userInfo = {"roll":"user"};
+      let firstUser = rtdb.child(usersRef,uid);
+      let userInfo = {"roll":"user","username":username};
       rtdb.update(firstUser,userInfo);
     }
   });
@@ -324,7 +325,7 @@ function getUsers() {
   $("#usersList").empty();
   rtdb.get(usersRef).then(ss=>{
     ss.forEach(function(item){
-      let usersInput = JSON.stringify(item.key);
+      let usersInput = JSON.stringify(item.val().username);
       if(typeof(usersInput) != "undefined"){
         var strWithOutQuotes= usersInput.replace(/"/g, '');
         $("#usersList").append('<li class="user" id = "' + strWithOutQuotes + '"><p>' + item.val().roll + ": " + strWithOutQuotes +'</p></li>');
@@ -414,7 +415,7 @@ function submitMessage(entered) {
   ignore = true;
   $("#enterChat").val('');
   assembleRefs();
-  let msg = {"message": entered, "user": username};
+  let msg = {"message": entered, "user": username, "userUid":uid};
   console.log(entered);
   rtdb.push(chatRef, msg);
   getMessages();
