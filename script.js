@@ -88,6 +88,8 @@ $(document).on('click', '#registerButton', function() {
     $("#showUsername").text(`Logged in as: ${username}`);
     signedEmail = email;
     pageIndex += 1;
+    assembleRefs();
+    getServers();
     showNextPage();
   }).catch(function(error) {
     // Handle Errors here.
@@ -112,6 +114,8 @@ $(document).on('click', '#loginButton', function() {
         username = ss.val();
         console.log(username);
         $("#showUsername").text(`Logged in as: ${username}`);
+        assembleRefs();
+        getServers();
         showNextPage();
       });
     }).catch(function(error) {
