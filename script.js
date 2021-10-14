@@ -412,11 +412,11 @@ $(document).on('keyup', '#enterChat', function() {
 });
 
 function submitMessage(entered) {
-  ignore = true;
+  //ignore = true;
   $("#enterChat").val('');
   assembleRefs();
   let msg = {"message": entered, "user": username, "userUid":uid};
   console.log(entered);
   rtdb.push(chatRef, msg);
-  getMessages();
+  //getMessages();
 }
