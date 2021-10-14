@@ -138,7 +138,7 @@ $(document).on('click', '.messageChoice', function() {
     if(newText !== null) {
       let newMessage = {"message":newText};
       rtdb.update(messageRef,newMessage);
-      getMessages();
+      //getMessages();
     }
   });
 });
@@ -212,6 +212,10 @@ $(document).on('click', '.adder', function() {
     console.log(newVal);
   }
 });
+
+rtdb.onChildChanged(servers,ss=>{
+  getMessages();
+})
 
 rtdb.onValue(servers, ss=>{
   if(server.length == 0) {
