@@ -185,7 +185,7 @@ $(document).on('click', '.adder', function() {
       let textChat = rtdb.child(newServer,"chats");
       let gChat = rtdb.child(textChat,"general");
       let chat = rtdb.child(gChat,"messages");
-      let newChannel = {"message": "first message!", "user": username};
+      let newChannel = {"message": "first message!", "user": username, "userUid":uid};
       let users = rtdb.child(newServer,"users");
       let firstUser = rtdb.child(users,uid);
       let userInfo = {"role":"admin","username":username};
@@ -205,7 +205,7 @@ $(document).on('click', '.adder', function() {
       let textChat = rtdb.child(newServer,"chats");
       let gChat = rtdb.child(textChat,newVal);
       let chat = rtdb.child(gChat,"messages");
-      let newChannel = {"message": "first message!", "user": username};
+      let newChannel = {"message": "first message!", "user": username, "userUid":uid};
       rtdb.push(chat, newChannel);
       rtdb.update(gChat,generalChat);
     }
