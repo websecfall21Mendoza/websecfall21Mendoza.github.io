@@ -168,6 +168,10 @@ let keyHandler = function(evt) {
   }
 });*/
 
+$(document).on('click','#superButton',function(){
+  fbauth.signOut(auth);
+});
+
 $(document).on('click', '.adder', function() {
   ignore = true;
   let newVal = window.prompt("Please enter name");
