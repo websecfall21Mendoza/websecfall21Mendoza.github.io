@@ -143,7 +143,16 @@ $(document).on('click', '.messageChoice', function() {
   });
 });
 
-
+$(document).on('click','.user',function(){
+  let userUid = $(this).attr("id");
+  console.log(`clicked on user: ${userUid}`);
+  let isPromoted = confirm(`Promote User?`);
+  if(isPromoted) {
+    let uidRef = rtdb.child(usersRef,userUid);
+    let newRole = {"role": "admin"};
+    rtdb.update(uidRef,newRole);
+  }
+});
 
 getServers();
 $( document ).ready(function() {
@@ -332,7 +341,7 @@ function getUsers() {
       let usersInput = JSON.stringify(item.val().username);
       if(typeof(usersInput) != "undefined"){
         var strWithOutQuotes= usersInput.replace(/"/g, '');
-        $("#usersList").append('<li class="user" id = "' + strWithOutQuotes + '"><p>' + item.val().role + ": " + strWithOutQuotes +'</p></li>');
+        $("#usersList").append('<li class="user" id = "' + item.key + '"><p>' + item.val().role + ": " + strWithOutQuotes +'</p></li>');
       }
     });
   });
