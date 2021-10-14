@@ -188,7 +188,7 @@ $(document).on('click', '.adder', function() {
       let newChannel = {"message": "first message!", "user": username};
       let users = rtdb.child(newServer,"users");
       let firstUser = rtdb.child(users,uid);
-      let userInfo = {"roll":"admin","username":username};
+      let userInfo = {"role":"admin","username":username};
       rtdb.update(firstUser,userInfo);
       ignore = true;
       rtdb.push(chat, newChannel);
@@ -319,7 +319,7 @@ function addUserIfNeeded() {
     }
     else {
       let firstUser = rtdb.child(usersRef,uid);
-      let userInfo = {"roll":"user","username":username};
+      let userInfo = {"role":"user","username":username};
       rtdb.update(firstUser,userInfo);
     }
   });
@@ -332,7 +332,7 @@ function getUsers() {
       let usersInput = JSON.stringify(item.val().username);
       if(typeof(usersInput) != "undefined"){
         var strWithOutQuotes= usersInput.replace(/"/g, '');
-        $("#usersList").append('<li class="user" id = "' + strWithOutQuotes + '"><p>' + item.val().roll + ": " + strWithOutQuotes +'</p></li>');
+        $("#usersList").append('<li class="user" id = "' + strWithOutQuotes + '"><p>' + item.val().role + ": " + strWithOutQuotes +'</p></li>');
       }
     });
   });
