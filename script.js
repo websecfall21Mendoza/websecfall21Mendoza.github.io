@@ -124,6 +124,24 @@ $(document).on('click', '#loginButton', function() {
 });
 
 
+$(document).on('click', '.messageChoice', function() {
+  console.log($(this).attr("id"));
+  var msgId = $(this).attr("id");
+  var messageRef = rtdb.child(channelRef,"messages");
+  messageRef = rtdb.child(messageRef,msgId);
+  rtdb.get(messageRef).then(ss=>{ //prevents message refresh every time something changes that's not relevant to messages
+    ss.forEach(function(item){
+      console.log(item.key);
+    });
+    let newText = prompt("Modify your message");
+    if(newText !== null) {
+      let newMessage = {"message":newText};
+      rtdb.update(messageRef,newMessage);
+      getMessages();
+    }
+  });
+});
+
 
 
 getServers();
@@ -321,6 +339,7 @@ function getMessages() {
       let userStamp = item.val().user;
       if(typeof(channelsInput) != "undefined"){
         var strWithOutQuotes= channelsInput.replace(/"/g, '');
+        console.log(`id val: ${idVal}`);
         $("#messagesList").append('<li class="messageChoice" id = "' + idVal + '"><h4>' + item.val().user + "</h4><p>" + strWithOutQuotes +'</p></li>');
         //$(`#${idVal}`).click(getMessageInfo);
       }
