@@ -63,11 +63,6 @@ $(document).on('click', '.switcher', function() {
 });
 
 
-
-
-
-
-
 $(document).on('click', '#registerButton', function() {
   let email = $("#emailRegister").val();
   let usernameRegistered = $("#usernameRegister").val();
@@ -226,6 +221,21 @@ $(document).on('click', '.adder', function() {
   }
 });
 
+$(document).on('click','.remover',function(){
+  let id = $(this).attr("id");
+  console.log(id);
+  let deletedObject = null;
+  if(id === "removeServer") {
+    console.log("here");
+    id = serverRef;
+  }
+  else {
+    console.log("there");
+    id = channelRef;
+  }
+  rtdb.remove(id);
+});
+
 rtdb.onChildChanged(servers,ss=>{
   getMessages();
 })
@@ -250,11 +260,14 @@ rtdb.onValue(servers, ss=>{
       return;
     }
     rtdb.get(channelRef).then(ss=>{ //prevents message refresh every time something changes that's not relevant to messages
-      if(messageCount < Object.keys(ss.val().messages).length) {
-        messageCount = Object.keys(ss.val().messages).length;
-        getMessages();
-        console.log("msg refresh");
+      if(ss.val() !== null) {
+        if(messageCount < Object.keys(ss.val().messages).length) {
+          messageCount = Object.keys(ss.val().messages).length;
+          getMessages();
+          console.log("msg refresh");
+        }
       }
+      
       
     });
     //getMessages();

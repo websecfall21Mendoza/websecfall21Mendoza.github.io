@@ -78,13 +78,17 @@ ul {
   overflow:auto;
 }
 
-.adder {
+.addOrRemove {
   cursor: pointer;
   height: fit-content;
   line-height: 25px;
   margin: 10px;
   padding: 3px;
   width: fit-content;
+}
+
+.remover {
+  background-color: #D0C4E8;
 }
 
 #messagesList {
