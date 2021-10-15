@@ -224,16 +224,31 @@ $(document).on('click', '.adder', function() {
 $(document).on('click','.remover',function(){
   let id = $(this).attr("id");
   console.log(id);
-  let deletedObject = null;
+  let deletedObject = null; 
+  let objectName = null;
+  let objectType = null;
   if(id === "removeServer") {
-    console.log("here");
-    id = serverRef;
+    if(server.length < 1) {
+      alert("please select a server to remove");
+      return;
+    }
+    deletedObject = serverRef;
+    objectName = server;
+    objectType = "server";
   }
   else {
-    console.log("there");
-    id = channelRef;
+    if(channel.length < 1) {
+      alert("please select a channel to remove");
+      return;
+    }
+    deletedObject = channelRef;
+    objectName = channel;
+    objectType = "channel";
   }
-  rtdb.remove(id);
+  let isDelete = confirm(`Remove ${objectType} ${objectName}?`);
+  if(isDelete) {
+    rtdb.remove(deletedObject);
+  }
 });
 
 rtdb.onChildChanged(servers,ss=>{
