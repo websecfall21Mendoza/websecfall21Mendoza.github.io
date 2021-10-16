@@ -164,6 +164,10 @@ li {
   transform: scale(1.03);
 }
 
+.user:hover {
+  transform: scale(1.03);
+}
+
 h4 {
   margin: 0px;
   margin-bottom: -10px;
