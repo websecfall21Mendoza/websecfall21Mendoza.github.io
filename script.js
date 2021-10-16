@@ -133,7 +133,7 @@ $(document).on('click', '.messageChoice', function() {
     ss.forEach(function(item){
       console.log(item.key);
     });
-    let newText = prompt("Modify your message");
+    let newText = prompt("Modify your message",ss.val().message);
     if(newText !== null) {
       let newMessage = {"message":newText};
       rtdb.update(messageRef,newMessage);
