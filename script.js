@@ -126,7 +126,6 @@ $(document).on('click', '#loginButton', function() {
 
 
 $(document).on('click', '.messageChoice', function() {
-  console.log($(this).attr("id"));
   var msgId = $(this).attr("id");
   var messageRef = rtdb.child(channelRef,"messages");
   messageRef = rtdb.child(messageRef,msgId);
@@ -135,7 +134,6 @@ $(document).on('click', '.messageChoice', function() {
   accRef = rtdb.child(accRef,"role");
   rtdb.get(messageRef).then(ss=>{ //prevents message refresh every time something changes that's not relevant to messages
     ss.forEach(function(item){
-      console.log(item.key);
     });
     let newText = prompt("Modify your message",ss.val().message);
     if(newText !== null) {
@@ -155,7 +153,6 @@ $(document).on('click', '.messageChoice', function() {
 
 $(document).on('click','.user',function(){
   let userUid = $(this).attr("id");
-  console.log(`clicked on user: ${userUid}`);
   let isPromoted = confirm(`Promote User?`);
   if(isPromoted) {
     let uidRef = rtdb.child(usersRef,userUid);
@@ -182,7 +179,6 @@ $( document ).ready(function() {
 });
 
 let keyHandler = function(evt) {
-  console.log(evt.keyCode);
   if (evt.keyCode === 13) {
     //username = $("#login").val();
     $("#showUsername").text(`Logged in as: ${username}`);
@@ -248,13 +244,11 @@ $(document).on('click', '.adder', function() {
       rtdb.push(chat, newChannel);
       rtdb.update(gChat,generalChat);
     }
-    console.log(newVal);
   }
 });
 
 $(document).on('click','.remover',function(){
   let id = $(this).attr("id");
-  console.log(id);
   let deletedObject = null; 
   let objectName = null;
   let objectType = null;
@@ -299,15 +293,11 @@ rtdb.onValue(servers, ss=>{
     ignore = false;
     return;
   }
-  console.log(channelCount);
   if(!ignore) {
     assembleRefs();
-    console.log("hit");
     getServers();
     getChannels();
-    console.log(`user: ${username}`);
     //addUserIfNeeded(); don't need to add twice, causes duplicate user list
-    console.log(channelRef);
     getUsers();
     if(channelRef.length == 0) {
       ignore = false;
@@ -428,7 +418,6 @@ function getMessages() {
       let userStamp = item.val().user;
       if(typeof(channelsInput) != "undefined"){
         var strWithOutQuotes= channelsInput.replace(/"/g, '');
-        console.log(`id val: ${idVal}`);
         $("#messagesList").append('<li class="messageChoice" id = "' + idVal + '"><h4>' + item.val().user + "</h4><p>" + strWithOutQuotes +'</p></li>');
         //$(`#${idVal}`).click(getMessageInfo);
       }
