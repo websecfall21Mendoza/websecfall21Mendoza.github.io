@@ -161,6 +161,17 @@ $(document).on('click','.user',function(){
     let newRole = {"role": "admin"};
     rtdb.update(uidRef,newRole);
   }
+  let accRef = rtdb.child(serverRef,"users");
+  accRef = rtdb.child(accRef,uid);
+  accRef = rtdb.child(accRef,"role");
+  rtdb.get(accRef).then(accPermissions => {
+    if(accPermissions.val() !== "admin") {
+      alert("Only server admins can promote users to admin");
+    }
+    if(userUid == uid) {
+      alert("Cannot promote yourself lol");
+    }
+  })
 });
 
 getServers();
