@@ -92,6 +92,7 @@ $(document).on('click', '#registerButton', function() {
     var errorMessage = error.message;
     console.log(errorCode);
     console.log(errorMessage);
+    alert("something went wrong! Make sure you are using a valid email")
   });
 });
 
@@ -206,6 +207,7 @@ $(document).on('click', '.adder', function() {
   ignore = true;
   let newVal = window.prompt("Please enter name");
   if(newVal != null && newVal.length > 0) {
+    newVal = newVal.replace(/\s+/g, '-');
     let adderId = $(this).attr('id');
     if(adderId == "addServer") {
       let info = {"serverName": newVal,"creator": username};
@@ -373,7 +375,7 @@ function highlightServers(id) {
 
 $(document).on('click', '.channelChoice', function() {
   if(channel.length > 0) {
-    $("#" + channel).css("background-color","#C3B1E1");
+    $("#" + channel + ".channelChoice").css("background-color","#C3B1E1");
   }
   channel = $(this).attr('id');
   assembleRefs();
@@ -448,6 +450,7 @@ function getChannels() {
       let channelsInput = JSON.stringify(item.val().channelName);
       if(typeof(channelsInput) != "undefined"){
         var strWithOutQuotes= channelsInput.replace(/"/g, '');
+        strWithOutQuotes = strWithOutQuotes.replace(/\s+/g, '-');
         $("#channelsList").append('<li class="channelChoice" id = "' + strWithOutQuotes + '"><p>' + strWithOutQuotes +'</p></li>');
         if(strWithOutQuotes == channel) {
           var channelId = "#" + channel;
@@ -465,6 +468,7 @@ function getServers() {
       let channelsInput = JSON.stringify(item.val().serverName);
       if(typeof(channelsInput) != "undefined"){
         var strWithOutQuotes= channelsInput.replace(/"/g, '');
+        strWithOutQuotes = strWithOutQuotes.replace(/\s+/g, '-');
         $("#servers").append('<div class="serverChoice" id = "' + strWithOutQuotes + '"><p>' + strWithOutQuotes +'</p></div>');
         if(strWithOutQuotes == server) {
           var serverId = "#" + server;
