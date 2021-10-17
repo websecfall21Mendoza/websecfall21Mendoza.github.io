@@ -129,6 +129,9 @@ $(document).on('click', '.messageChoice', function() {
   var msgId = $(this).attr("id");
   var messageRef = rtdb.child(channelRef,"messages");
   messageRef = rtdb.child(messageRef,msgId);
+  let accRef = rtdb.child(serverRef,"users");
+  accRef = rtdb.child(accRef,uid);
+  accRef = rtdb.child(accRef,"role");
   rtdb.get(messageRef).then(ss=>{ //prevents message refresh every time something changes that's not relevant to messages
     ss.forEach(function(item){
       console.log(item.key);
@@ -137,6 +140,13 @@ $(document).on('click', '.messageChoice', function() {
     if(newText !== null) {
       let newMessage = {"message":newText};
       rtdb.update(messageRef,newMessage);
+      rtdb.get(accRef).then(accPermissions => {
+        rtdb.get(messageRef).then(msgAuthor => {
+          if(accPermissions.val() !== "admin" && msgAuthor.val().userUid !== uid) {
+            alert("Only server admins and the author of the message can edit messages");
+          }
+        });
+      })
       //getMessages();
     }
   });
@@ -206,7 +216,15 @@ $(document).on('click', '.adder', function() {
       rtdb.update(gChat,generalChat);
       getServers();
     }
-    else if(adderId == "addChannel") { //FIX
+    else if(adderId == "addChannel") {
+      let accRef = rtdb.child(serverRef,"users");
+      accRef = rtdb.child(accRef,uid);
+      accRef = rtdb.child(accRef,"role");
+      rtdb.get(accRef).then(accPermissions => {
+        if(accPermissions.val() !== "admin") {
+          alert("Only server admins can add channels");
+        }
+      })
       let info = {"serverName": server,"creator": username};
       let generalChat = {"channelName": newVal, "creator": username};
       let newServer = rtdb.child(servers,server);
@@ -227,6 +245,14 @@ $(document).on('click','.remover',function(){
   let deletedObject = null; 
   let objectName = null;
   let objectType = null;
+  let accRef = rtdb.child(serverRef,"users");
+  accRef = rtdb.child(accRef,uid);
+  accRef = rtdb.child(accRef,"role");
+  rtdb.get(accRef).then(accPermissions => {
+    if(accPermissions.val() !== "admin") {
+      alert("Only server admins can remove servers and channels");
+    }
+  })
   if(id === "removeServer") {
     if(server.length < 1) {
       alert("please select a server to remove");
