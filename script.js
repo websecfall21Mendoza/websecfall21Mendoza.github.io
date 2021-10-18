@@ -148,9 +148,10 @@ $(document).on('click', '.messageChoice', function() {
   accRef = rtdb.child(accRef,uid);
   accRef = rtdb.child(accRef,"role");
   rtdb.get(messageRef).then(ss=>{ //prevents message refresh every time something changes that's not relevant to messages
-    ss.forEach(function(item){
-    });
     let newText = prompt("Modify your message, to delete enter a blank field",ss.val().message);
+    if(newText == null) {
+      return;
+    }
     rtdb.get(accRef).then(accPermissions => {
       rtdb.get(messageRef).then(msgAuthor => {
         if(accPermissions.val() !== "admin" && msgAuthor.val().userUid !== uid) {
