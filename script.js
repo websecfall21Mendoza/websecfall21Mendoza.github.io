@@ -150,19 +150,23 @@ $(document).on('click', '.messageChoice', function() {
   rtdb.get(messageRef).then(ss=>{ //prevents message refresh every time something changes that's not relevant to messages
     ss.forEach(function(item){
     });
-    let newText = prompt("Modify your message",ss.val().message);
-    if(newText !== null) {
-      let newMessage = {"message":newText};
-      rtdb.update(messageRef,newMessage);
-      rtdb.get(accRef).then(accPermissions => {
-        rtdb.get(messageRef).then(msgAuthor => {
-          if(accPermissions.val() !== "admin" && msgAuthor.val().userUid !== uid) {
-            alert("Only server admins and the author of the message can edit messages");
-          }
-        });
-      })
-      //getMessages();
-    }
+    let newText = prompt("Modify your message, to delete enter a blank field",ss.val().message);
+    rtdb.get(accRef).then(accPermissions => {
+      rtdb.get(messageRef).then(msgAuthor => {
+        if(accPermissions.val() !== "admin" && msgAuthor.val().userUid !== uid) {
+          alert("Only server admins and the author of the message can edit messages");
+        }
+        if(newText !== "") {
+          let newMessage = {"message":newText};
+          rtdb.update(messageRef,newMessage);
+        }
+        else{
+          rtdb.remove(messageRef);
+        }
+      });
+    })
+      
+    //getMessages();
   });
 });
 
