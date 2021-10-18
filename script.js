@@ -40,6 +40,7 @@ var pageIndex = 0;
 let signedEmail = "";
 let ignoreUsers = false;
 let uid = "";
+let messageLock = false;
 
 
 var showNextPage = function(){
@@ -299,6 +300,9 @@ $(document).on('click','.remover',function(){
 
 
 rtdb.onChildChanged(servers,ss=>{
+
+  console.log("child change");
+  $("#messagesList").empty();
   getMessages();
 })
 
@@ -322,6 +326,7 @@ rtdb.onValue(servers, ss=>{
       if(ss.val() !== null) {
         if(messageCount < Object.keys(ss.val().messages).length) {
           messageCount = Object.keys(ss.val().messages).length;
+          $("#messagesList").empty();
           getMessages();
           console.log("msg refresh");
         }
@@ -437,20 +442,24 @@ function getUsers() {
 
 
 function getMessages() {
-  $("#messagesList").empty();
-  rtdb.get(chatRef).then(ss=>{
-    ss.forEach(function(item){
-      //console.log(`id: ${item.key}`);
-      let idVal = item.key;
-      let channelsInput = JSON.stringify(item.val().message);
-      let userStamp = item.val().user;
-      if(typeof(channelsInput) != "undefined"){
-        var strWithOutQuotes= channelsInput.replace(/"/g, '');
-        $("#messagesList").append('<li class="messageChoice" id = "' + idVal + '"><h4>' + item.val().user + "</h4><p>" + strWithOutQuotes +'</p></li>');
-        //$(`#${idVal}`).click(getMessageInfo);
-      }
+  if(messageLock == false) {
+    messageLock = true;
+    $("#messagesList").empty();
+    rtdb.get(chatRef).then(ss=>{
+      ss.forEach(function(item){
+        //console.log(`id: ${item.key}`);
+        let idVal = item.key;
+        let channelsInput = JSON.stringify(item.val().message);
+        let userStamp = item.val().user;
+        if(typeof(channelsInput) != "undefined"){
+          var strWithOutQuotes= channelsInput.replace(/"/g, '');
+          $("#messagesList").append('<li class="messageChoice" id = "' + idVal + '"><h4>' + item.val().user + "</h4><p>" + strWithOutQuotes +'</p></li>');
+          //$(`#${idVal}`).click(getMessageInfo);
+        }
+      });
+      messageLock = false;
     });
-  });
+  }
 }
 
 
