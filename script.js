@@ -204,6 +204,7 @@ $(document).on('click', '.adder', function() {
   let newVal = window.prompt("Please enter name");
   if(newVal != null && newVal.length > 0) {
     newVal = newVal.replace(/\s+/g, '-');
+    newVal = newVal.replace(/[^a-zA-Z0-9-]/g, '');
     let adderId = $(this).attr('id');
     if(adderId == "addServer") {
       let info = {"serverName": newVal,"creator": username};
