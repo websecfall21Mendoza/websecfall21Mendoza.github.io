@@ -41,14 +41,16 @@ let signedEmail = "";
 let ignoreUsers = false;
 let uid = "";
 
-//here
+
 var showNextPage = function(){
   var template = document.getElementById(pages[pageIndex]).innerHTML;
   //do stuff to template here
   display.innerHTML = template;
 }
 
+
 showNextPage();
+
 
 $(document).on('click', '.switcher', function() {
   console.log("clicked!");
@@ -151,6 +153,7 @@ $(document).on('click', '.messageChoice', function() {
   });
 });
 
+
 $(document).on('click','.user',function(){
   let userUid = $(this).attr("id");
   let isPromoted = confirm(`Promote User?`);
@@ -172,11 +175,13 @@ $(document).on('click','.user',function(){
   })
 });
 
+
 getServers();
 $( document ).ready(function() {
   console.log( "ready!" );
   //$("#login").keyup(keyHandler);
 });
+
 
 let keyHandler = function(evt) {
   if (evt.keyCode === 13) {
@@ -187,17 +192,11 @@ let keyHandler = function(evt) {
   //alert(idFromDOM);
 }
 
-/*$("#login").keyup(function(event) {
-  if (event.keyCode === 13) {
-    username = $("#login").val();
-    $("#showUsername").text(`Logged in as: ${username}`);
-
-  }
-});*/
 
 $(document).on('click','#superButton',function(){
   fbauth.signOut(auth);
 });
+
 
 $(document).on('click', '.adder', function() {
   ignore = true;
@@ -248,6 +247,7 @@ $(document).on('click', '.adder', function() {
   }
 });
 
+
 $(document).on('click','.remover',function(){
   let id = $(this).attr("id");
   let deletedObject = null; 
@@ -285,9 +285,11 @@ $(document).on('click','.remover',function(){
   }
 });
 
+
 rtdb.onChildChanged(servers,ss=>{
   getMessages();
 })
+
 
 rtdb.onValue(servers, ss=>{
   if(server.length == 0) {
@@ -320,12 +322,14 @@ rtdb.onValue(servers, ss=>{
   ignore = false;
 });
 
+
 $(document).on('click', '.serverChoice', function() {
   ignoreUsers = true;
   $("#messagesList").empty();
   //$("#enterChat").hide();
   //$("#enterChat").html("hello");
   $("usersList").empty();
+  $("adminsList").empty();
   changedServers = true;
   highlightServers($(this).attr('id'));
   channel = "";
@@ -350,6 +354,7 @@ $(document).on('click', '.serverChoice', function() {
   });
 });
 
+
 function highlightServers(id) {
   if(!changedServers) {
     $(`#${id}`).css("background-color","#B6D0E2");
@@ -363,6 +368,7 @@ function highlightServers(id) {
     $(`#${id}`).css("background-color","#B6D0E2");
   }
 }
+
 
 $(document).on('click', '.channelChoice', function() {
   if(channel.length > 0) {
@@ -381,6 +387,7 @@ $(document).on('click', '.channelChoice', function() {
   $(this).css("background-color","#B6D0E2");
 });
 
+
 function addUserIfNeeded() {
   rtdb.get(usersRef).then(ss=>{
     if(ss.val().hasOwnProperty(uid)) { //if exists need to get users
@@ -396,18 +403,26 @@ function addUserIfNeeded() {
   });
 }
 
+
 function getUsers() {
   $("#usersList").empty();
+  $("#adminsList").empty();
   rtdb.get(usersRef).then(ss=>{
     ss.forEach(function(item){
       let usersInput = JSON.stringify(item.val().username);
       if(typeof(usersInput) != "undefined"){
         var strWithOutQuotes= usersInput.replace(/"/g, '');
-        $("#usersList").append('<li class="user" id = "' + item.key + '"><p>' + item.val().role + ": " + strWithOutQuotes +'</p></li>');
+        if(item.val().role === "admin") {
+          $("#adminsList").append('<li class="user" id = "' + item.key + '"><p>' + strWithOutQuotes +'</p></li>');
+        }
+        else {
+          $("#usersList").append('<li class="user" id = "' + item.key + '"><p>' + strWithOutQuotes +'</p></li>');
+        }
       }
     });
   });
 }
+
 
 function getMessages() {
   $("#messagesList").empty();
@@ -426,10 +441,6 @@ function getMessages() {
   });
 }
 
-/*let getMessageInfo = function(evt) {
-  let clickedElement = evt.currentTarget;
-  alert(clickedElement);
-}*/
 
 function getChannels() {
   $("#channelsList").empty();
@@ -451,6 +462,7 @@ function getChannels() {
   });
 }
 
+
 function getServers() {
   $("#servers").empty();
   rtdb.get(servers).then(ss=>{
@@ -469,6 +481,7 @@ function getServers() {
   });
 }
 
+
 function assembleRefs() {
   if(server.length > 0) {
     serverRef = rtdb.child(servers,server);
@@ -481,11 +494,13 @@ function assembleRefs() {
   }
 }
 
+
 $(document).on('keyup', '#enterChat', function() {
     if (event.keyCode === 13) {
         submitMessage($("#enterChat").val());
     }
 });
+
 
 function submitMessage(entered) {
   //ignore = true;
