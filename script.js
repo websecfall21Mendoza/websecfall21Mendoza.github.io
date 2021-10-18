@@ -66,35 +66,47 @@ $(document).on('click', '.switcher', function() {
 
 
 $(document).on('click', '#registerButton', function() {
+  let validAccount = true;
   let email = $("#emailRegister").val();
   let usernameRegistered = $("#usernameRegister").val();
-  let p1 = $("#passwordRegister").val();
-  let p2 = $("#passwordConfirm").val();
-  if (p1 != p2){
-    alert("Passwords don't match");
-    return;
-  }
-  fbauth.createUserWithEmailAndPassword(auth, email, p1).then(somedata=>{
-    uid = somedata.user.uid;
-    let userRoleRef = rtdb.ref(db, `/users/${uid}/roles/user`);
-    let userRef = rtdb.ref(db, `/users/${uid}/username`);
-    rtdb.set(userRoleRef, true);
-    rtdb.set(userRef, usernameRegistered);
-    alert("successfully signed up!");
-    username = usernameRegistered;
-    $("#showUsername").text(`Logged in as: ${username}`);
-    signedEmail = email;
-    pageIndex += 1;
-    assembleRefs();
-    getServers();
-    showNextPage();
-  }).catch(function(error) {
-    // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    console.log(errorCode);
-    console.log(errorMessage);
-    alert("something went wrong! Make sure you are using a valid email")
+  let listOfUsers = rtdb.child(titleRef,"users");
+  rtdb.get(listOfUsers).then(usernames =>{
+    usernames.forEach(function(item){
+      if(item.val().username === usernameRegistered) {
+        alert("username is already in use");
+        validAccount = false;
+      }
+    });
+    let p1 = $("#passwordRegister").val();
+    let p2 = $("#passwordConfirm").val();
+    if (p1 != p2){
+      alert("Passwords don't match");
+      validAccount = false;
+    }
+    if(validAccount) {
+      fbauth.createUserWithEmailAndPassword(auth, email, p1).then(somedata=>{
+        uid = somedata.user.uid;
+        let userRoleRef = rtdb.ref(db, `/users/${uid}/roles/user`);
+        let userRef = rtdb.ref(db, `/users/${uid}/username`);
+        rtdb.set(userRoleRef, true);
+        rtdb.set(userRef, usernameRegistered);
+        alert("successfully signed up!");
+        username = usernameRegistered;
+        $("#showUsername").text(`Logged in as: ${username}`);
+        signedEmail = email;
+        pageIndex += 1;
+        assembleRefs();
+        getServers();
+        showNextPage();
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        console.log(errorCode);
+        console.log(errorMessage);
+        alert("something went wrong! Make sure you are using a valid email")
+      });
+    }
   });
 });
 
